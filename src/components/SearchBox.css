@@ -1,0 +1,18 @@
+.search-icon {
+  position: absolute;
+  pointer-events: none;
+  height: 18px;
+  width: 18px;
+  right: 25px;
+  top: 15px;
+}
+
+.weather-icon {
+  height: 40px;
+}
+
+.country-dropdown,
+.country-dropdown:hover {
+  background-color: #fff;
+  border: 1px solid #ced4da;
+}
