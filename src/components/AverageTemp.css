@@ -1,0 +1,14 @@
+.date-range {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.temp {
+  font-size: 100px;
+  font-weight: 600;
+}
+
+.temp-unit {
+  font-size: 26px;
+  vertical-align: top;
+}
