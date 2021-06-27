@@ -7,26 +7,20 @@ import { Col, Dropdown, Row } from 'react-bootstrap';
 import searchIcon from '../assets/images/search.png';
 import weather from '../assets/images/weather.png';
 
-const SearchBox = () => {
-  const weatherApiKey = process.env.REACT_APP_OPEN_WEATHER_KEY;
-
+const SearchBox = (props) => {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      console.log(event.target.value);
-      axios
-        .get('http://api.openweathermap.org/data/2.5/forecast', {
-          params: {
-            q: 'London',
-            appid: weatherApiKey,
-            units: 'metric',
-          },
-        })
-        .then((res) => console.log(res));
+      props.getForecast(event.target.value);
     }
   };
 
   return (
-    <Row className="p-4 justify-content-center">
+    <Row
+      className="p-4 justify-content-center"
+      style={
+        !props.isShowingResults ? { paddingTop: '100px' } : { paddingTop: '0' }
+      }
+    >
       <Col
         xs={12}
         md={10}
