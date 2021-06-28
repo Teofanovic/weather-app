@@ -12,6 +12,7 @@ const Forecast = ({ forecast }) => {
             dateString={key}
             day={dayjs(key).format('dddd')}
             temp={forecast[key]}
+            key={index}
           />
         );
       })}

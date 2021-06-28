@@ -1,13 +1,15 @@
 import './SearchBox.css';
 
-import axios from 'axios';
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Dropdown, Row } from 'react-bootstrap';
 
 import searchIcon from '../assets/images/search.png';
 import weather from '../assets/images/weather.png';
+import countries from '../constants/countries';
 
 const SearchBox = (props) => {
+  const [selectedCountry, setSelectedCountry] = useState(null);
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       props.getForecast(event.target.value);
@@ -15,41 +17,49 @@ const SearchBox = (props) => {
   };
 
   return (
-    <Row
-      className="p-4 justify-content-center"
-      style={
-        !props.isShowingResults ? { paddingTop: '100px' } : { paddingTop: '0' }
-      }
-    >
+    <Row className="p-4 justify-content-center">
       <Col
         xs={12}
         md={10}
-        lg={7}
+        lg={8}
         xl={6}
         className="p-3 border rounded row align-items-center justify-content-center bg-light shadow"
       >
         <Col sm={1} className="d-none d-sm-flex justify-content-center">
           <img src={weather} alt="" className="weather-icon" />
         </Col>
-        <Col xs={3} className="d-flex justify-content-center">
+        <Col xs={3} sm={2} className="d-flex justify-content-center">
           <Dropdown>
             <Dropdown.Toggle
-              variant="info"
-              id="dropdown-basic"
               size="lg"
-              className="country-dropdown"
+              className="country-dropdown d-flex align-items-center text-dark background-white"
             >
-              Country
+              {selectedCountry ? (
+                <>
+                  <img
+                    src={`https://www.countryflags.io/${selectedCountry.code}/flat/24.png`}
+                    alt=""
+                  />
+                  <span className="px-1">{selectedCountry.code}</span>
+                </>
+              ) : (
+                'Country'
+              )}
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+              {countries.map((country) => (
+                <Dropdown.Item
+                  onClick={() => setSelectedCountry(country)}
+                  key={country.code}
+                >
+                  {country.name}
+                </Dropdown.Item>
+              ))}
             </Dropdown.Menu>
           </Dropdown>
         </Col>
-        <Col xs={8} className="position-relative">
+        <Col xs={9} className="position-relative">
           <img src={searchIcon} alt="" className="search-icon" />
           <input
             type="text"
@@ -57,6 +67,7 @@ const SearchBox = (props) => {
             id="location"
             placeholder="Please enter your location..."
             onKeyDown={handleKeyDown}
+            autoComplete="off"
           />
         </Col>
       </Col>
