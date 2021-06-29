@@ -11,13 +11,13 @@ const AverageTemp = ({ temp, unit, startDate, endDate }) => {
     getMonthName(startDate) === getMonthName(endDate) ? false : true;
 
   return (
-    <div className="d-flex flex-column align-items-center pt-5">
+    <div className="d-flex flex-column align-items-center pt-2 pt-sm-5">
       <span className="date-range text-uppercase">
         {getMonthName(startDate)} {getDateOfMonth(startDate)} -{' '}
         {showEndMonth && getMonthName(endDate)} {getDateOfMonth(endDate)}{' '}
         {getYear(endDate)}
       </span>
-      <h1 className="temp text-light py-4">
+      <h1 className="temp text-light pt-4">
         {temp}
         <span className="temp-unit text-uppercase">&#176;{unit}</span>
       </h1>

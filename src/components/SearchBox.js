@@ -7,12 +7,16 @@ import searchIcon from '../assets/images/search.png';
 import weather from '../assets/images/weather.png';
 import countries from '../constants/countries';
 
-const SearchBox = (props) => {
+const SearchBox = ({ setError, getForecast }) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      props.getForecast(event.target.value);
+      if (!selectedCountry) {
+        setError('Please select a country!');
+      } else {
+        getForecast(event.target.value, selectedCountry.code);
+      }
     }
   };
 
@@ -22,13 +26,18 @@ const SearchBox = (props) => {
         xs={12}
         md={10}
         lg={8}
-        xl={6}
+        xl={7}
         className="p-3 border rounded row align-items-center justify-content-center bg-light shadow"
       >
-        <Col sm={1} className="d-none d-sm-flex justify-content-center">
+        <Col md={1} className="d-none d-md-flex justify-content-center">
           <img src={weather} alt="" className="weather-icon" />
         </Col>
-        <Col xs={3} sm={2} className="d-flex justify-content-center">
+        <Col
+          xs={12}
+          sm={3}
+          md={2}
+          className="d-flex justify-content-center pb-3 pb-sm-0"
+        >
           <Dropdown>
             <Dropdown.Toggle
               size="lg"
@@ -59,7 +68,7 @@ const SearchBox = (props) => {
             </Dropdown.Menu>
           </Dropdown>
         </Col>
-        <Col xs={9} className="position-relative">
+        <Col xs={12} sm={9} className="position-relative">
           <img src={searchIcon} alt="" className="search-icon" />
           <input
             type="text"

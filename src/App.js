@@ -8,19 +8,27 @@ import { Container } from 'react-bootstrap';
 import AverageTemp from './components/AverageTemp';
 import Forecast from './components/Forecast';
 import SearchBox from './components/SearchBox';
+import SunTimes from './components/SunTimes';
 
 const App = () => {
   const weatherApiKey = process.env.REACT_APP_OPEN_WEATHER_KEY;
 
   const [forecast, setForecast] = useState(null);
   const [totalAverage, setTotalAverage] = useState(null);
+  const [sunTimes, setSunTimes] = useState(null);
   const [error, setError] = useState('');
 
   const setupForecast = (data) => {
     if (data) {
+      setSunTimes({
+        sunrise: dayjs.unix(data.city?.sunrise),
+        sunset: dayjs.unix(data.city?.sunset),
+        timezoneOffset: data.city?.timezone,
+      });
+
       let weather = {};
       // get all temps grouped by days
-      data.forEach((period) => {
+      data.list.forEach((period) => {
         const dayInMonth = dayjs.unix(period.dt).format('YYYY-MM-DD');
         if (dayInMonth in weather) {
           weather[dayInMonth] = [...weather[dayInMonth], period.main.temp];
@@ -50,30 +58,33 @@ const App = () => {
     }
   };
 
-  const getForecast = (cityName) => {
+  const getForecast = (cityName, countryCode) => {
     setError('');
     setForecast('');
     setTotalAverage('');
     axios
       .get('http://api.openweathermap.org/data/2.5/forecast', {
         params: {
-          q: cityName,
+          q: `${cityName},${countryCode}`,
           appid: weatherApiKey,
           units: 'metric',
         },
       })
-      .then((res) => setupForecast(res.data.list))
+      .then((res) => setupForecast(res.data))
       .catch((err) => {
+        console.error(err);
         setError(err.response?.data?.message);
       });
   };
 
   const containerClass =
-    forecast || totalAverage ? '' : 'd-flex justify-content-center flex-column';
+    forecast || totalAverage || sunTimes
+      ? ''
+      : 'd-flex justify-content-center flex-column';
 
   return (
     <Container fluid className={`main-container ${containerClass}`}>
-      <SearchBox getForecast={getForecast} />
+      <SearchBox getForecast={getForecast} setError={setError} />
       {totalAverage && !error && (
         <AverageTemp
           temp={totalAverage}
@@ -83,6 +94,13 @@ const App = () => {
         />
       )}
       {forecast && !error && <Forecast forecast={forecast} />}
+      {sunTimes && !error && (
+        <SunTimes
+          sunrise={sunTimes.sunrise}
+          sunset={sunTimes.sunset}
+          timezoneOffset={sunTimes.timezoneOffset}
+        />
+      )}
       {error && (
         <div className="d-flex justify-content-center text-capitalize py-4">
           <h2>{error}</h2>
