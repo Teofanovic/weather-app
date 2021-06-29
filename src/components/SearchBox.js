@@ -1,7 +1,7 @@
 import './SearchBox.css';
 
 import React, { useState } from 'react';
-import { Col, Dropdown, Row } from 'react-bootstrap';
+import { Col, Dropdown, FormControl, Row } from 'react-bootstrap';
 
 import searchIcon from '../assets/images/search.png';
 import weather from '../assets/images/weather.png';
@@ -9,6 +9,8 @@ import countries from '../constants/countries';
 
 const SearchBox = ({ setError, getForecast }) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [show, setShow] = useState(false);
+  const [countriesToShow, setCountriesToShow] = useState(countries);
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -18,6 +20,22 @@ const SearchBox = ({ setError, getForecast }) => {
         getForecast(event.target.value, selectedCountry.code);
       }
     }
+  };
+
+  const handleToggle = (isOpen, event) => {
+    if (!isOpen && event.target.id !== 'search-input') {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
+  };
+
+  const onSearchCountries = (event) => {
+    setCountriesToShow(
+      countries.filter((country) =>
+        country.name.toLowerCase().includes(event.target.value)
+      )
+    );
   };
 
   return (
@@ -38,7 +56,7 @@ const SearchBox = ({ setError, getForecast }) => {
           md={2}
           className="d-flex justify-content-center pb-3 pb-sm-0"
         >
-          <Dropdown>
+          <Dropdown show={show} onToggle={handleToggle}>
             <Dropdown.Toggle
               size="lg"
               className="country-dropdown d-flex align-items-center text-dark background-white"
@@ -57,7 +75,18 @@ const SearchBox = ({ setError, getForecast }) => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              {countries.map((country) => (
+              <Dropdown.Item>
+                <FormControl
+                  autoFocus
+                  className="w-100"
+                  placeholder="Type to filter..."
+                  id="search-input"
+                  onChange={onSearchCountries}
+                  autocomplete="off"
+                />
+              </Dropdown.Item>
+              <Dropdown.Divider />
+              {countriesToShow.map((country) => (
                 <Dropdown.Item
                   onClick={() => setSelectedCountry(country)}
                   key={country.code}

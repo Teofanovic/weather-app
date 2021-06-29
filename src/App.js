@@ -62,25 +62,27 @@ const App = () => {
     setError('');
     setForecast('');
     setTotalAverage('');
-    axios
-      .get('http://api.openweathermap.org/data/2.5/forecast', {
-        params: {
-          q: `${cityName},${countryCode}`,
-          appid: weatherApiKey,
-          units: 'metric',
-        },
-      })
-      .then((res) => setupForecast(res.data))
-      .catch((err) => {
-        console.error(err);
-        setError(err.response?.data?.message);
-      });
+    if (cityName) {
+      axios
+        .get('http://api.openweathermap.org/data/2.5/forecast', {
+          params: {
+            q: `${cityName},${countryCode}`,
+            appid: weatherApiKey,
+            units: 'metric',
+          },
+        })
+        .then((res) => setupForecast(res.data))
+        .catch((err) => {
+          console.error(err);
+          setError(err.response?.data?.message);
+        });
+    } else {
+      setError('Please enter a city name');
+    }
   };
 
   const containerClass =
-    forecast || totalAverage || sunTimes
-      ? ''
-      : 'd-flex justify-content-center flex-column';
+    forecast || totalAverage ? '' : 'd-flex justify-content-center flex-column';
 
   return (
     <Container fluid className={`main-container ${containerClass}`}>
