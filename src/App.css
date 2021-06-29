@@ -1,10 +1,24 @@
 .main-container {
   height: 100vh;
   width: 100%;
-  background: linear-gradient(
-    90deg,
-    rgba(14, 0, 36, 1) 0%,
-    rgba(121, 9, 9, 1) 0%,
-    rgba(241, 255, 0, 1) 100%
-  );
+}
+
+.cold {
+  background: linear-gradient(45deg, #f2fcfe, #1c92d2 100%);
+}
+
+.freezing {
+  background: linear-gradient(45deg, #1cb5e0, #000046 100%);
+}
+
+.warm {
+  background: linear-gradient(45deg, #f2c94c, #f2994a 100%);
+}
+
+.hot {
+  background: linear-gradient(45deg, #e45f5b, #b31217 100%);
+}
+
+.default {
+  background: linear-gradient(45deg, #bdc3c7, #2c3e50 100%);
 }

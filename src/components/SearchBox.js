@@ -82,7 +82,7 @@ const SearchBox = ({ setError, getForecast }) => {
                   placeholder="Type to filter..."
                   id="search-input"
                   onChange={onSearchCountries}
-                  autocomplete="off"
+                  autoComplete="off"
                 />
               </Dropdown.Item>
               <Dropdown.Divider />

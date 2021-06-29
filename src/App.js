@@ -18,6 +18,10 @@ const App = () => {
   const [sunTimes, setSunTimes] = useState(null);
   const [error, setError] = useState('');
 
+  const hotTemp = 25;
+  const warmTemp = 10;
+  const coldTemp = 0;
+
   const setupForecast = (data) => {
     if (data) {
       setSunTimes({
@@ -81,11 +85,34 @@ const App = () => {
     }
   };
 
+  const getBackgroundColorClass = (temp) => {
+    if (!temp) {
+      return 'default';
+    }
+    if (temp > hotTemp) {
+      return 'hot';
+    }
+    if (temp >= warmTemp && temp <= hotTemp) {
+      return 'warm';
+    }
+    if (temp >= coldTemp && temp < warmTemp) {
+      return 'cold';
+    }
+    if (temp < coldTemp) {
+      return 'freezing';
+    }
+  };
+
   const containerClass =
     forecast || totalAverage ? '' : 'd-flex justify-content-center flex-column';
 
   return (
-    <Container fluid className={`main-container ${containerClass}`}>
+    <Container
+      fluid
+      className={`main-container ${containerClass} ${getBackgroundColorClass(
+        totalAverage
+      )}`}
+    >
       <SearchBox getForecast={getForecast} setError={setError} />
       {totalAverage && !error && (
         <AverageTemp
